@@ -61,6 +61,8 @@ class ParserHtml:
         <h1>La Fueguina</h1>
     </header>
     <h1>Artículos Periodísticos</h1>
+    <div class="indice">
+    <strong>Índice por autor:</strong><br><br>
     <div class="contenedor-articulos">
         """
 
@@ -72,13 +74,21 @@ class ParserHtml:
 </body>
 </html>
         """
-        articulos_por_autor = {}
+        articulos_por_autor = {}                                # Agrupar articulos por autor
         for titulo, autor, texto in self.articulos:
             articulos_por_autor.setdefault(autor, []).append((titulo, texto))
 
-            cuerpo = ""
-        for autor, articulos in articulos_por_autor.items():
-            cuerpo += f"<h3>{autor}</h3>\n"
+        cuerpo = ""                                             #Indice de autores
+        for autor in articulos_por_autor:
+            autor_id = autor.lower().replace(" ", "-")
+            cuerpo += f'<a href="#{autor_id}">{autor}</a>\n'
+
+
+            cuerpo += '<div class="contenedor-articulos">\n'
+
+        for autor, articulos in articulos_por_autor.items():    #Articulos por autor.
+            autor_id = autor.lower().replace(" ", "-")
+            cuerpo += f'<h3 id="{autor_id}">{autor}</h3>\n'
             for titulo, texto in articulos:
                 cuerpo += f"""
                 <div class="articulo">
