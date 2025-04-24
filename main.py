@@ -49,3 +49,16 @@ if __name__ == "__main__":
 
     parser = ParserHtml(articulos)
     parser.crear_html()
+
+    palabra = "fondos"
+    articulos_filtrados = parser.filtrar_palabra_clave(palabra)
+
+    if articulos_filtrados:
+        print(f"Articulos que tienen la palabra '{palabra}'")
+        for articulo in articulos_filtrados:
+            print(f" - {articulo.titulo} ({articulo.autor})")
+
+        parser_filtrado = ParserHtml([(a.titulo, a.autor,a.texto) for a in articulos_filtrados])
+        parser_filtrado.crear_html("articulos_filtrados.html")
+    else: 
+        print(f"No se encontraron archivos con esa palabra '{palabra}'.")

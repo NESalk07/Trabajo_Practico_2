@@ -11,3 +11,6 @@ class Articulo:
             <p>{self.texto}</p>
         </div>
         """
+    
+    def buscar_palabra(self, palabra_clave):
+        return palabra_clave.lower() in self.texto.lower()

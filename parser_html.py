@@ -1,13 +1,16 @@
 from articulo import Articulo
 
 class ParserHtml:
-    def __init__(self, articulos):                                  #espera una lista de tuplas (titulo, autor, texto)
-        self.articulos = []                                         # Inicia la clase y la normaliza
-        for titulo, autor, texto in articulos:                      # recorre las tuplas en la lista de articulos
-            if titulo.strip() and autor.strip() and texto.strip():  # Titulo, autor y texto no pueden estar vacios
-                autor_normalizado = autor.strip().title()           # title() capitaliza el autor
-                self.articulos.append((titulo.strip(), autor_normalizado, texto.strip())) #se guarda en la lista los datos limpios
+    def __init__(self, articulos):                                      #espera una lista de tuplas (titulo, autor, texto)
+        self.articulos = []                                             # Inicia la clase y la normaliza
+        for titulo, autor, texto in articulos:                          # recorre las tuplas en la lista de articulos
+            if titulo.strip() and autor.strip() and texto.strip():      # Titulo, autor y texto no pueden estar vacios
+                autor_normalizado = autor.strip().title()               # title() capitaliza el autor
+                self.articulos.append(Articulo(titulo, autor, texto))    #se guarda en la lista los datos limpios
     
+    def filtrar_palabra_clave(self, palabra_clave):
+        return [articulo for articulo in self.articulos if articulo.buscar_palabra(palabra_clave)]
+
     def crear_html(self, nombre_archivo='articulos.html'):
         html_inicio= """
 <!DOCTYPE html>
