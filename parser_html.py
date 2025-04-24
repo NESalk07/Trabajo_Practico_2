@@ -9,6 +9,12 @@ class ParserHtml:
                 autor_normalizado = autor.strip().title()               # title() capitaliza el autor
                 self.articulos.append(Articulo(titulo, autor_normalizado, texto))   #se crea instancias de la clase articulo
     
+    def _slugify(self, texto):
+        import re
+        texto = texto.lower()
+        texto = re.sub(r'\W+', '-', texto)
+        return texto.strip('-')
+
     def filtrar_palabra_clave(self, palabra_clave):
         return [articulo for articulo in self.articulos if articulo.buscar_palabra(palabra_clave)]
     
@@ -28,7 +34,8 @@ class ParserHtml:
 <head>
     <meta charset="UTF-8">
     <title>Artículos Periodísticos</title>
-    <link rel="stylesheet" href="estilos.css">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -72,15 +79,17 @@ class ParserHtml:
     </style>
 </head>
 <body>
-    <header>
-        <h1>La Fueguina</h1>
-    </header>
-    <h1>Artículos Periodísticos</h1>
-    <div class="indice">
-    <strong>Índice por autor:</strong><br><br>
-    <div class="contenedor-articulos">
-        """
-
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-4">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">La Fueguina</a>
+    </div>
+</nav>
+    <div class="container">
+        <h1 class="text-center mb-4">Artículos Periodísticos</h1>
+        <div class="mb-4">
+            <h5>Índice por autor:</h5>
+    """
+        
         html_fin = """
     </div>
     <footer>
@@ -96,24 +105,32 @@ class ParserHtml:
         cuerpo = ""                                             #Indice de autores
         for autor in articulos_por_autor:
             autor_id = autor.lower().replace(" ", "-")
-            cuerpo += f'<a href="#{autor_id}">{autor}</a>\n'
+            cuerpo += f'<a class="btn btn-outline-primary btn-sm m-1" href="#{autor_id}">{autor}</a>\n'
 
-
-            cuerpo += '<div class="contenedor-articulos">\n'
-
-        for autor, articulos in articulos_por_autor.items():        # se cran los articulos
+        for autor, articulos in articulos_por_autor.items():
             autor_id = autor.lower().replace(" ", "-")
-            cuerpo += f'<h3 id="{autor_id}">{autor}</h3>\n'
+            cuerpo += f'<hr><h2 id="{autor_id}">{autor}</h2>\n'
+            cuerpo += '<div class="row">\n'
+
             for i, articulo in enumerate(articulos):
                 index = self.articulos.index(articulo) + 1
                 link = f"articulos/articulo_{index}.html"
                 cuerpo += f"""
-            <div class="articulo">
-                <h2><a href="{link}">{articulo.titulo}</a></h2>
-                <h4>{articulo.autor}</h4>
-                <p>{articulo.texto[:300]}...</p>
+            <div class=\"col-md-4 mb-4\">
+                <div class=\"card h-100\">
+                <div class=\"card-body\">
+                <h5 class=\"card-title\"><a href=\"{link}\">{articulo.titulo}</a></h5>
+                <h6 class=\"card-subtitle mb-2 text-muted\">{articulo.autor}</h6>
+                <p class=\"card-text\">{articulo.texto[:300]}...</p>
+                <a href=\"{link}\" class=\"btn btn-primary\">Leer más</a>
             </div>
-            """
+        </div>
+    </div>
+    """
+                if (i + 1) % 3 == 0:                            # cada e articulos cierra y abre una nueva fila
+                    cuerpo += '</div><div class="row">\n'
+
+            cuerpo += '</div>\n'                                # cierra la ultima fila
 
         html_completo = html_inicio + cuerpo + html_fin
 

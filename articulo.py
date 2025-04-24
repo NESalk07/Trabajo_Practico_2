@@ -21,34 +21,28 @@ class Articulo:
 <head>
     <meta charset="UTF-8">
     <title>{self.titulo}</title>
-    <style>
-        body {{
-            font-family: Arial, sans-serif;
-            background-color: #f2f2f2;
-            padding: 30px;
-        }}
-        .articulo {{
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        }}
-        h2 {{ color: #1a73e8; }}
-        h4 {{ color: #666; }}
-        p {{ line-height: 1.6; }}
-        a {{ text-decoration: none; color: #1a73e8; }}
-    </style>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-    <a href="../articulos.html">← Volver al índice</a>      <!-- enlace para volver a la pagina anterior-->
-    <div class="articulo">
-        <h2>{self.titulo}</h2>
-        <h4>{self.autor}</h4>
-        <p>{self.texto}</p>
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-4">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">La Fueguina</a>
+  </div>
+</nav>
+<div class="container">
+    <div class="card">
+        <div class="card-body">
+            <h2 class="card-title">{self.titulo}</h2>
+            <h4 class="card-subtitle mb-2 text-muted">{self.autor}</h4>
+            <p class="card-text">{self.texto}</p>
+        </div>
     </div>
+    <a href="../articulos.html" class="btn btn-link mt-3">← Volver al índice</a>
+</div>
 </body>
 </html>
 """
+
 
     def buscar_palabra(self, palabra_clave):                    #metodo para buscar la palabra clave
         return palabra_clave.lower() in self.texto.lower()
