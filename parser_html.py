@@ -30,14 +30,21 @@ class ParserHtml:
     def filtrar_palabra_clave(self, palabra_clave):
         return [articulo for articulo in self.articulos if articulo.buscar_palabra(palabra_clave)]
 
-    def crear_paginas_articulos(self, carpeta='articulos'):             # Indica donde se guarda los HTML de cada articulos
-        if not os.path.exists(carpeta):   # Se verifica si ya existe una carpeta
+    def crear_paginas_articulos(self, carpeta='articulos'):                 # Se crea la carpeta que va a contener cada HTML por articulo
+        if not os.path.exists(carpeta):      # Verifica si existe la carpeta           
             os.makedirs(carpeta)
 
-        for i, articulo in enumerate(self.articulos):                   # for para crear un HTML por cada articulo
-            nombre_archivo = f"{carpeta}/articulo_{i+1}.html"           # nombra a los nuevos HTML como articulo_1/2/3 sucesivamente
+        total = len(self.articulos)
+
+        for i, articulo in enumerate(self.articulos):
+            nombre_archivo = f"{carpeta}/articulo_{i+1}.html"
+
+            enlace_anterior = f"articulo_{i}.html" if i > 0 else None                   # enlace para ir al anterio articulo
+            enlace_siguiente = f"articulo_{i+2}.html" if i < total - 1 else None        # enlace para ir al siguiente articulo
+
             with open(nombre_archivo, 'w', encoding='utf-8') as f:
-                f.write(articulo.to_html_completo())
+                f.write(articulo.to_html_completo(enlace_anterior, enlace_siguiente))
+
 
     def crear_html(self, nombre_archivo='articulos.html'):              # Inicio del metodo que contiene el HTML
         html_inicio = """

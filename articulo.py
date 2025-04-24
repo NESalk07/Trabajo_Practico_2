@@ -16,7 +16,13 @@ class Articulo:
         </div>
         """
 
-    def to_html_completo(self):
+    def to_html_completo(self, enlace_anterior=None, enlace_siguiente=None):
+        navegacion = '<div class="mt-4">'
+        if enlace_anterior:
+            navegacion += f'<a class="btn btn-outline-secondary me-2" href="{enlace_anterior}">← Anterior</a>'
+        if enlace_siguiente:
+            navegacion += f'<a class="btn btn-outline-secondary" href="{enlace_siguiente}">Siguiente →</a>'
+        navegacion += '</div>'
         return f"""
 <!DOCTYPE html>
 <html lang="es">
@@ -48,6 +54,7 @@ class Articulo:
             <h2 class="card-title">{self.titulo}</h2>
             <h4 class="card-subtitle mb-3 text-muted">{self.autor}</h4>
             <p class="card-text">{self.texto}</p>
+            {navegacion}
         </div>
     </div>
     <a href="../articulos.html" class="btn btn-outline-secondary">← Volver al índice</a>
