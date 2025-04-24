@@ -1,8 +1,8 @@
 from datetime import datetime
 
 class CrearFooter: 
-    @staticmethod                                                   #Funcion que declara un metodo estatico
-    def crear_footer():
+    @staticmethod                                                   # Funcion que declara un metodo estatico
+    def crear_footer():                                             # Crea el metodo crear_footer
         año_actual = datetime.now().year
         return f"""
         <footer class="text-center mt-5">

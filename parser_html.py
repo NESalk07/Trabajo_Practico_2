@@ -101,6 +101,30 @@ class ParserHtml:
         for articulo in self.articulos:
             articulos_por_autor.setdefault(articulo.autor, []).append(articulo)
 
+        # Crea una tabla con el resumen de los autores con la cantidad de articulos publicados
+        tabla_resumen = """                                         
+            <h5 class="mt-4">Cantidad de artículos por autor</h5>
+            <table class="table table-striped table-bordered">
+            <thead class="table-dark">
+            <tr>
+                <th>Autor</th>
+                <th>Artículos</th>
+            </tr>
+            </thead>
+            <tbody>
+        """
+        for autor, lista_articulos in articulos_por_autor.items():
+            tabla_resumen += f"""
+            <tr>
+                <td>{autor}</td>
+                <td>{len(lista_articulos)}</td>
+            </tr>
+            """
+        tabla_resumen += """
+            </tbody>
+        </table>
+        """
+
         cuerpo = ""                                             #Indice de autores
         for autor in articulos_por_autor:
             autor_id = autor.lower().replace(" ", "-")
@@ -126,12 +150,12 @@ class ParserHtml:
         </div>
     </div>
     """
-                if (i + 1) % 3 == 0:                            # cada e articulos cierra y abre una nueva fila
+                if (i + 1) % 3 == 0:                            # cada tres articulos cierra y abre una nueva fila
                     cuerpo += '</div><div class="row">\n'
 
             cuerpo += '</div>\n'                                # cierra la ultima fila
 
-        html_completo = html_inicio + cuerpo + html_fin
+        html_completo = html_inicio + tabla_resumen + cuerpo + html_fin
 
         with open(nombre_archivo, 'w', encoding='utf-8') as f:
             f.write(html_completo)
