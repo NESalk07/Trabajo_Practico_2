@@ -12,7 +12,32 @@ if __name__ == "__main__":
         "causa que comenzó a construirse en diciembre de 2023 a partir de una serie de denuncias "
         "realizadas en una línea telefónica que habilitó para esos fines el ministerio de Seguridad, que"
         " conduce Patricia Bullrich.."),
-        ("Nuevos aumentos","corto"," sin autor"),
+        ("Nuevos aumentos",""," sin autor"),
+        ("La ruta del dinero piquetero”: la Justicia reconstruye el recorrido de subsidios, facturas truchas y empresas fantasma", 
+         "Camila Dolabjian","En menos de 10 días, el 25 de junio, Eduardo Belliboni deberá presentarse en Comodoro Py a indagatoria "
+         "en el juzgado de Sebastián Casanello. El caso del Polo Obrero y su líder es el más avanzado en cuanto a las denuncias que "
+         "se realizaron contra los grupos piqueteros, en las que además de haberse reunido prueba sobre extorsiones y amenazas a los "
+         "beneficiarios de los planes sociales, se recopiló documentación contundente sobre el manejo de los subsidios que recibían del Estado. "
+         "En ese sentido, la Justicia acumuló fuertes indicios de que el dinero salía de las arcas públicas, pasaba a través de un sistema de "
+         "cooperativas y empresas fantasmas con facturas truchas y cheques redirigidos, y volvía a los bolsillos de la política.LA NACION mostró "
+         "el 30 de mayo las facturas apócrifas que firmaba el propio Belliboni, pero el líder piquetero negó conocer que las empresas "
+         "que le prestaban servicios o le vendían productos eran de compañías fantasma. Ahora, LA NACION accedió a una serie de cheques y "
+         "posteriores rendiciones al Ministerio de Desarrollo Social que lo complican todavía más, porque la firma de Belliboni aparece en "
+         "todo el circuito de dinero. Y revela que los destinatarios finales de los fondos que se pagaban en concepto de computadoras, software "
+         "y otros bienes, en realidad, no eran los supuestos vendedores, sino la empresa que está detrás de la propaganda del Partido Obrero. "
+         "Estos elementos fueron incorporados como indicios de una ruta del dinero destinada a quedarse con parte del dinero de los subsidios a "
+         "través de facturas apócrifas."),
+        ("Los sorpresivos vínculos con la política y el poder detrás de la empresa investigada por las facturas truchas del Polo Obrero",""
+        "Camila Dolabjian","La investigación por el uso de facturas truchas por parte del Polo Obrero, que hizo foco en el uso de fondos "
+        "de los subsidios del Estado, amenaza con destapar una trama más amplia de lavado de dinero, con nexos en la política y figuras "
+        "acusadas de corrupción. La empresa Coxtex, una de las empresas que emitió las facturas apócrifas firmadas por Eduardo Belliboni, "
+        "muestra vínculos sospechosos con abogados y escribanos vinculados a la política, según una investigación de LA NACION. Coxtex, que "
+        "es una sociedad fantasma de acuerdo al expediente que tramita en el juzgado de Sebastián Casanello, operó con el Polo Obrero, que la"
+        " habría contratado al menos dos veces, por cerca de $5millones. Sin embargo, los nuevos datos demuestran que no solo actuó con el Polo "
+        "Obrero. Al momento en que facturó para la Cooperativa de Trabajo El Resplandor Limitada (del Polo Obrero), Coxtex ya había emitido otras"
+        " 535 facturas. Un enorme volumen que demuestra que su actividad iba mucho más allá que el grupo piquetero de izquierda. Meses antes, esas "
+        "otras facturas habían hecho sonar alarmas en la AFIP, pero nunca fueron atendidas, ni el CUIT fue suspendido. LA NACION confirmó que el "
+        "organismo recaudador ya tenía información de la firma sospechosa en 2020."),
         ("Tips Jurídicos: claves para no ser engañado en un acuerdo", "Juan Bautista Torres Lopez", "De la"
         " mano de este consejo, debe encenderse una sirena mental cuando una de las partes contratantes "
         "busca que la otra parte no acceda a una copia de lo que firmó o va a firmar. Las “razones” para no"
@@ -55,7 +80,6 @@ if __name__ == "__main__":
     except ArticuloInvalidoError as e:
         print("Error al procesar los articulos: ", e)
 
-    parser.crear_paginas_articulos()        #Se crean las paginas de cada articulo
     parser.crear_paginas_articulos()        #Se crean las paginas de cada articulo
 
     palabra = "fondos"

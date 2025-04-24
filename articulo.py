@@ -7,7 +7,7 @@ class Articulo:
         self.texto = texto.strip()
 
     def to_html(self):
-        resumen = self.texto[:300] + "…" if len(self.texto) > 300 else self.texto    # Corta el texto en 300 caracteres
+        resumen = self.texto[:300] + "…" if len(self.texto) > 300 else self.texto
         return f"""
         <div class="articulo">
             <h2>{self.titulo}</h2>
@@ -15,7 +15,7 @@ class Articulo:
             <p>{resumen}</p>
         </div>
         """
-    
+
     def to_html_completo(self):
         return f"""
 <!DOCTYPE html>
@@ -27,24 +27,38 @@ class Articulo:
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-4">
-  <div class="container-fluid">
+  <div class="container">
     <a class="navbar-brand" href="#">La Fueguina</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContenido" aria-controls="navbarContenido" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarContenido">
+      <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="../articulos.html">Inicio</a>
+        </li>
+      </ul>
+    </div>
   </div>
 </nav>
+
 <div class="container">
-    <div class="card">
+    <div class="card mb-4">
         <div class="card-body">
             <h2 class="card-title">{self.titulo}</h2>
-            <h4 class="card-subtitle mb-2 text-muted">{self.autor}</h4>
+            <h4 class="card-subtitle mb-3 text-muted">{self.autor}</h4>
             <p class="card-text">{self.texto}</p>
         </div>
     </div>
-    <a href="../articulos.html" class="btn btn-link mt-3">← Volver al índice</a>
+    <a href="../articulos.html" class="btn btn-outline-secondary">← Volver al índice</a>
 </div>
+
+{CrearFooter.crear_footer()}
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
 """
-
-
-    def buscar_palabra(self, palabra_clave):                    #metodo para buscar la palabra clave
+    
+    def buscar_palabra(self, palabra_clave):
         return palabra_clave.lower() in self.texto.lower()

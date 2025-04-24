@@ -2,22 +2,22 @@ import os
 from articulo import Articulo
 from crear_footer import CrearFooter
 from excepciones import ArticuloInvalidoError
+from collections import defaultdict
 
 class ParserHtml:
-    def __init__(self, articulos):                                                  # espera una lista de tuplas (titulo, autor, texto)
-        self.articulos = []                                                         # Inicia la clase y la normaliza
-        for titulo, autor, texto in articulos:                                      # recorre las tuplas en la lista de articulos
-            if not (titulo.strip() and autor.strip() and texto.strip()):                  # Titulo, autor y texto no pueden estar vacios
+    def __init__(self, articulos):
+        self.articulos = []
+        for titulo, autor, texto in articulos:
+            if not (titulo.strip() and autor.strip() and texto.strip()):
                 continue
             if len(titulo.strip()) < 10:
-                raise ArticuloInvalidoError(f"El titulo es demasiado corto: '{titulo}' ")
+                raise ArticuloInvalidoError(f"El título es demasiado corto: '{titulo}' ")
             if len(texto.strip()) < 10:
-                raise ArticuloInvalidoError(f"El texto es demasiado corto para el articulo: '{titulo}' ")
-                
-                
-            autor_normalizado = autor.strip().title()                           # title() capitaliza el autor
-            self.articulos.append(Articulo(titulo, autor_normalizado, texto))   # se crea instancias de la clase articulo
-    
+                raise ArticuloInvalidoError(f"El texto es demasiado corto para el artículo: '{titulo}' ")
+
+            autor_normalizado = autor.strip().title()
+            self.articulos.append(Articulo(titulo, autor_normalizado, texto))
+
     def _slugify(self, texto):
         import re
         texto = texto.lower()
@@ -26,21 +26,21 @@ class ParserHtml:
 
     def filtrar_palabra_clave(self, palabra_clave):
         return [articulo for articulo in self.articulos if articulo.buscar_palabra(palabra_clave)]
-    
+
     def crear_paginas_articulos(self, carpeta='articulos'):
         if not os.path.exists(carpeta):
             os.makedirs(carpeta)
 
-            for i, articulo in enumerate(self.articulos):
-                nombre_archivo = f"{carpeta}/articulo_{i+1}.html"
-                with open(nombre_archivo, 'w', encoding='utf-8') as f:
-                    f.write(articulo.to_html_completo())
+        for i, articulo in enumerate(self.articulos):
+            nombre_archivo = f"{carpeta}/articulo_{i+1}.html"
+            with open(nombre_archivo, 'w', encoding='utf-8') as f:
+                f.write(articulo.to_html_completo())
 
     def crear_html(self, nombre_archivo='articulos.html'):
-        html_inicio= """
-<!DOCTYPE html>
-<html lang="es">
-<head>
+        html_inicio = """
+    <!DOCTYPE html>
+    <html lang="es">
+    <head>
     <meta charset="UTF-8">
     <title>Artículos Periodísticos</title>
     <!-- Bootstrap CSS -->
@@ -85,31 +85,43 @@ class ParserHtml:
         .articulo p {
             line-height: 1.6;
         }
+
+        .btn-outline-secondary {
+            margin-right: 5px;
+        }
     </style>
-</head>
-<body>
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-4">
-    <div class="container-fluid">
-      <a class="navbar-brand" href="#">La Fueguina</a>
-    </div>
-</nav>
-    <div class="container">
-        <h1 class="text-center mb-4">Artículos Periodísticos</h1>
-        <div class="mb-4">
-            <h5>Índice por autor:</h5>
-    """
-        
-        html_fin = f"""
+    </head>
+    <body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-4">
+        <div class="container-fluid">
+        <a class="navbar-brand" href="#">La Fueguina</a>
         </div>
-{CrearFooter.crear_footer()}                                    <!-- Se llama al metodo crear_footer de la clase CrearFooter-->
-</body>
-</html>
-        """
-        articulos_por_autor = {}                                # Agrupar articulos por autor
+    </nav>
+        <div class="container">
+            <h1 class="text-center mb-4">Artículos Periodísticos</h1>
+    """
+
+    # Agrupar artículos por autor
+        articulos_por_autor = {}
         for articulo in self.articulos:
             articulos_por_autor.setdefault(articulo.autor, []).append(articulo)
 
-        # Crea una tabla con el resumen de los autores con la cantidad de articulos publicados
+    # Agrupar autores por inicial del apellido
+        from collections import defaultdict
+        autores_por_letra = defaultdict(list)
+        for autor in articulos_por_autor:
+            partes = autor.split()
+            if partes:
+                inicial = partes[-1][0].upper()
+                autores_por_letra[inicial].append(autor)
+
+    # Crear el índice alfabético (solo letras con autores)
+        indice_letras = '<div class="mb-4"><h5>Filtrar por inicial del apellido:</h5>\n<div class="d-flex flex-wrap gap-2">\n'
+        for letra in sorted(autores_por_letra):
+            indice_letras += f'<a class="btn btn-outline-secondary btn-sm" href="#letra-{letra}">{letra}</a>\n'
+        indice_letras += '</div></div>\n'
+
+    # Crear tabla resumen (cantidad de artículos por autor)
         tabla_resumen = """                                         
             <h5 class="mt-4">Cantidad de artículos por autor</h5>
             <table class="table table-striped table-bordered">
@@ -133,38 +145,42 @@ class ParserHtml:
         </table>
         """
 
-        cuerpo = ""                                             #Indice de autores
-        for autor in articulos_por_autor:
-            autor_id = autor.lower().replace(" ", "-")
-            cuerpo += f'<a class="btn btn-outline-primary btn-sm m-1" href="#{autor_id}">{autor}</a>\n'
+    # Crear el índice de autores con sus letras
+        cuerpo = ""  # Índice de autores
+        letra_actual = ""
+        for autor, articulos in sorted(articulos_por_autor.items(), key=lambda x: x[0].split()[-1]):
+            letra = autor.split()[-1][0].upper()
+            if letra != letra_actual:
+                cuerpo += f'<hr><h2 id="letra-{letra}">Autores con "{letra}"</h2>\n'
+                letra_actual = letra
 
-        for autor, articulos in articulos_por_autor.items():
             autor_id = autor.lower().replace(" ", "-")
-            cuerpo += f'<hr><h2 id="{autor_id}">{autor}</h2>\n'
+            cuerpo += f'<h3 id="{autor_id}">{autor}</h3>\n'
             cuerpo += '<div class="row">\n'
 
             for i, articulo in enumerate(articulos):
                 index = self.articulos.index(articulo) + 1
                 link = f"articulos/articulo_{index}.html"
                 cuerpo += f"""
-            <div class=\"col-md-4 mb-4\">
-                <div class=\"card h-100\">
-                <div class=\"card-body\">
-                <h5 class=\"card-title\"><a href=\"{link}\">{articulo.titulo}</a></h5>
-                <h6 class=\"card-subtitle mb-2 text-muted\">{articulo.autor}</h6>
-                <p class=\"card-text\">{articulo.texto[:300]}...</p>
-                <a href=\"{link}\" class=\"btn btn-primary\">Leer más</a>           <!-- Me muestra todo el texto del articulo -->
-            </div>
-        </div>
-    </div>
-    """
-                if (i + 1) % 3 == 0:                            # cada tres articulos cierra y abre una nueva fila
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title"><a href="{link}">{articulo.titulo}</a></h5>
+                            <h6 class="card-subtitle mb-2 text-muted">{articulo.autor}</h6>
+                            <p class="card-text">{articulo.texto[:300]}...</p>
+                            <a href="{link}" class="btn btn-primary">Leer más</a>
+                        </div>
+                    </div>
+                </div>
+                """
+                if (i + 1) % 3 == 0:
                     cuerpo += '</div><div class="row">\n'
+            cuerpo += '</div>\n'
 
-            cuerpo += '</div>\n'                                # cierra la ultima fila
 
-        html_completo = html_inicio + tabla_resumen + cuerpo + html_fin
+        html_completo = html_inicio + indice_letras + tabla_resumen + cuerpo + CrearFooter.crear_footer() + "</body></html>"
 
+    # Guardar el archivo HTML
         with open(nombre_archivo, 'w', encoding='utf-8') as f:
             f.write(html_completo)
 
