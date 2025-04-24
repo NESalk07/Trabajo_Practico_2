@@ -1,3 +1,5 @@
+from crear_footer import CrearFooter
+
 class Articulo:
     def __init__(self, titulo, autor, texto):
         self.titulo = titulo.strip()

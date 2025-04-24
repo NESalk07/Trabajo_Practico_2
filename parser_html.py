@@ -1,13 +1,14 @@
 import os
 from articulo import Articulo
+from crear_footer import CrearFooter
 
 class ParserHtml:
-    def __init__(self, articulos):                                      #espera una lista de tuplas (titulo, autor, texto)
-        self.articulos = []                                             # Inicia la clase y la normaliza
-        for titulo, autor, texto in articulos:                          # recorre las tuplas en la lista de articulos
-            if titulo.strip() and autor.strip() and texto.strip():      # Titulo, autor y texto no pueden estar vacios
-                autor_normalizado = autor.strip().title()               # title() capitaliza el autor
-                self.articulos.append(Articulo(titulo, autor_normalizado, texto))   #se crea instancias de la clase articulo
+    def __init__(self, articulos):                                                  # espera una lista de tuplas (titulo, autor, texto)
+        self.articulos = []                                                         # Inicia la clase y la normaliza
+        for titulo, autor, texto in articulos:                                      # recorre las tuplas en la lista de articulos
+            if titulo.strip() and autor.strip() and texto.strip():                  # Titulo, autor y texto no pueden estar vacios
+                autor_normalizado = autor.strip().title()                           # title() capitaliza el autor
+                self.articulos.append(Articulo(titulo, autor_normalizado, texto))   # se crea instancias de la clase articulo
     
     def _slugify(self, texto):
         import re
@@ -90,11 +91,9 @@ class ParserHtml:
             <h5>Índice por autor:</h5>
     """
         
-        html_fin = """
-    </div>
-    <footer>
-        <p>Martes 22 de abril de 2025</p>
-    </footer>
+        html_fin = f"""
+        </div>
+{CrearFooter.crear_footer()}                                    <!-- Se llama al metodo crear_footer de la clase CrearFooter-->
 </body>
 </html>
         """
@@ -122,7 +121,7 @@ class ParserHtml:
                 <h5 class=\"card-title\"><a href=\"{link}\">{articulo.titulo}</a></h5>
                 <h6 class=\"card-subtitle mb-2 text-muted\">{articulo.autor}</h6>
                 <p class=\"card-text\">{articulo.texto[:300]}...</p>
-                <a href=\"{link}\" class=\"btn btn-primary\">Leer más</a>
+                <a href=\"{link}\" class=\"btn btn-primary\">Leer más</a>           <!-- Me muestra todo el texto del articulo -->
             </div>
         </div>
     </div>
