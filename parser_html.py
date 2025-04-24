@@ -1,14 +1,22 @@
 import os
 from articulo import Articulo
 from crear_footer import CrearFooter
+from excepciones import ArticuloInvalidoError
 
 class ParserHtml:
     def __init__(self, articulos):                                                  # espera una lista de tuplas (titulo, autor, texto)
         self.articulos = []                                                         # Inicia la clase y la normaliza
         for titulo, autor, texto in articulos:                                      # recorre las tuplas en la lista de articulos
-            if titulo.strip() and autor.strip() and texto.strip():                  # Titulo, autor y texto no pueden estar vacios
-                autor_normalizado = autor.strip().title()                           # title() capitaliza el autor
-                self.articulos.append(Articulo(titulo, autor_normalizado, texto))   # se crea instancias de la clase articulo
+            if not (titulo.strip() and autor.strip() and texto.strip()):                  # Titulo, autor y texto no pueden estar vacios
+                continue
+            if len(titulo.strip()) < 10:
+                raise ArticuloInvalidoError(f"El titulo es demasiado corto: '{titulo}' ")
+            if len(texto.strip()) < 10:
+                raise ArticuloInvalidoError(f"El texto es demasiado corto para el articulo: '{titulo}' ")
+                
+                
+            autor_normalizado = autor.strip().title()                           # title() capitaliza el autor
+            self.articulos.append(Articulo(titulo, autor_normalizado, texto))   # se crea instancias de la clase articulo
     
     def _slugify(self, texto):
         import re

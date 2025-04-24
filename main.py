@@ -1,4 +1,5 @@
-from parser_html import ParserHtml      # se importa la clase ParserHtml
+from parser_html import ParserHtml                  # se importa la clase ParserHtml
+from excepciones import ArticuloInvalidoError       # se importa la excepcion
 
 if __name__ == "__main__":
     articulos = [
@@ -11,7 +12,7 @@ if __name__ == "__main__":
         "causa que comenzó a construirse en diciembre de 2023 a partir de una serie de denuncias "
         "realizadas en una línea telefónica que habilitó para esos fines el ministerio de Seguridad, que"
         " conduce Patricia Bullrich.."),
-        ("Nuevos aumentos",""," sin autor"),
+        ("Nuevos aumentos","corto"," sin autor"),
         ("Tips Jurídicos: claves para no ser engañado en un acuerdo", "Juan Bautista Torres Lopez", "De la"
         " mano de este consejo, debe encenderse una sirena mental cuando una de las partes contratantes "
         "busca que la otra parte no acceda a una copia de lo que firmó o va a firmar. Las “razones” para no"
@@ -47,9 +48,15 @@ if __name__ == "__main__":
           "cadena de esta industria..")
     ]
 
-    parser = ParserHtml(articulos)
-    parser.crear_html()                   #Se crea el HTML
-    parser.crear_paginas_articulos()      #Se crean las paginas de cada articulo
+
+    try:
+        parser = ParserHtml(articulos)
+        parser.crear_html()                     #Se crea el HTML
+    except ArticuloInvalidoError as e:
+        print("Error al procesar los articulos: ", e)
+
+    parser.crear_paginas_articulos()        #Se crean las paginas de cada articulo
+    parser.crear_paginas_articulos()        #Se crean las paginas de cada articulo
 
     palabra = "fondos"
     articulos_filtrados = parser.filtrar_palabra_clave(palabra)
