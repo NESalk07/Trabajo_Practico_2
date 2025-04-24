@@ -1,4 +1,4 @@
-from parser_html import ParserHtml
+from parser_html import ParserHtml      # se importa la clase ParserHtml
 
 if __name__ == "__main__":
     articulos = [

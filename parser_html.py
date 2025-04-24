@@ -6,7 +6,7 @@ class ParserHtml:
         for titulo, autor, texto in articulos:                          # recorre las tuplas en la lista de articulos
             if titulo.strip() and autor.strip() and texto.strip():      # Titulo, autor y texto no pueden estar vacios
                 autor_normalizado = autor.strip().title()               # title() capitaliza el autor
-                self.articulos.append(Articulo(titulo, autor, texto))    #se guarda en la lista los datos limpios
+                self.articulos.append(Articulo(titulo, autor_normalizado, texto))   #se crea instancias de la clase articulo
     
     def filtrar_palabra_clave(self, palabra_clave):
         return [articulo for articulo in self.articulos if articulo.buscar_palabra(palabra_clave)]
