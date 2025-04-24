@@ -1,5 +1,7 @@
+from articulo import Articulo
+
 class ParserHtml:
-    def __init__(self, articulos): #espera una lista de tuplas (titulo, autor, texto)
+    def __init__(self, articulos):                                  #espera una lista de tuplas (titulo, autor, texto)
         self.articulos = []                                         # Inicia la clase y la normaliza
         for titulo, autor, texto in articulos:                      # recorre las tuplas en la lista de articulos
             if titulo.strip() and autor.strip() and texto.strip():  # Titulo, autor y texto no pueden estar vacios
@@ -75,8 +77,8 @@ class ParserHtml:
 </html>
         """
         articulos_por_autor = {}                                # Agrupar articulos por autor
-        for titulo, autor, texto in self.articulos:
-            articulos_por_autor.setdefault(autor, []).append((titulo, texto))
+        for articulo in self.articulos:
+            articulos_por_autor.setdefault(articulo.autor, []).append(articulo)
 
         cuerpo = ""                                             #Indice de autores
         for autor in articulos_por_autor:
@@ -89,8 +91,9 @@ class ParserHtml:
         for autor, articulos in articulos_por_autor.items():    #Articulos por autor.
             autor_id = autor.lower().replace(" ", "-")
             cuerpo += f'<h3 id="{autor_id}">{autor}</h3>\n'
-            for titulo, texto in articulos:
-                cuerpo += f"""
+            for articulo in articulos:
+                cuerpo += articulo.to_html()
+                """
                 <div class="articulo">
                     <h2>{titulo}</h2>
                     <p>{texto}</p>
