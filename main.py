@@ -48,7 +48,8 @@ if __name__ == "__main__":
     ]
 
     parser = ParserHtml(articulos)
-    parser.crear_html()
+    parser.crear_html()                   #Se crea el HTML
+    parser.crear_paginas_articulos()      #Se crean las paginas de cada articulo
 
     palabra = "fondos"
     articulos_filtrados = parser.filtrar_palabra_clave(palabra)

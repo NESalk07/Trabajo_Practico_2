@@ -1,3 +1,4 @@
+import os
 from articulo import Articulo
 
 class ParserHtml:
@@ -10,6 +11,15 @@ class ParserHtml:
     
     def filtrar_palabra_clave(self, palabra_clave):
         return [articulo for articulo in self.articulos if articulo.buscar_palabra(palabra_clave)]
+    
+    def crear_paginas_articulos(self, carpeta='articulos'):
+        if not os.path.exists(carpeta):
+            os.makedirs(carpeta)
+
+            for i, articulo in enumerate(self.articulos):
+                nombre_archivo = f"{carpeta}/articulo_{i+1}.html"
+                with open(nombre_archivo, 'w', encoding='utf-8') as f:
+                    f.write(articulo.to_html_completo())
 
     def crear_html(self, nombre_archivo='articulos.html'):
         html_inicio= """
@@ -91,17 +101,19 @@ class ParserHtml:
 
             cuerpo += '<div class="contenedor-articulos">\n'
 
-        for autor, articulos in articulos_por_autor.items():    #Articulos por autor.
+        for autor, articulos in articulos_por_autor.items():        # se cran los articulos
             autor_id = autor.lower().replace(" ", "-")
             cuerpo += f'<h3 id="{autor_id}">{autor}</h3>\n'
-            for articulo in articulos:
-                cuerpo += articulo.to_html()
-                """
-                <div class="articulo">
-                    <h2>{titulo}</h2>
-                    <p>{texto}</p>
-                </div>
-                """
+            for i, articulo in enumerate(articulos):
+                index = self.articulos.index(articulo) + 1
+                link = f"articulos/articulo_{index}.html"
+                cuerpo += f"""
+            <div class="articulo">
+                <h2><a href="{link}">{articulo.titulo}</a></h2>
+                <h4>{articulo.autor}</h4>
+                <p>{articulo.texto[:300]}...</p>
+            </div>
+            """
 
         html_completo = html_inicio + cuerpo + html_fin
 
